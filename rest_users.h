@@ -15,7 +15,7 @@ typedef enum{
 
 #define REST_USER_LOGIN_LENGTH 32
 /*
-    @brief This type can be asigned to an element, to set the required permissions
+    @brief User
     @param user Username (max. 32 char)
     @param passwd Password (max. 32 char)
     @param permission Permission level of a user
