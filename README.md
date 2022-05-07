@@ -2,7 +2,7 @@
 REST api library for esp32
 # Example
 This example shows how to create an API resource that can be used to query the last reset reason of the device.
-**Code to crate the resource**
+## Code to crate the resource
 ```c
 static const char* API_RESET_JSON_TEMPLATE = "{\"status\":%d, \"reason\":\"%s\"}";
 esp_err_t rest_reset_handler(httpd_req_t *req){
@@ -71,10 +71,30 @@ httpd_uri_t uri_reset = {
     .user_ctx = NULL
 };
 ```
-**Setup routine**
+## Setup routine
 This will usually be added to your `app_main(void)` function:
 ```c
 rest_api_t *api = NULL;
 rest_api_add(&api, &uri_reset);
 ```
 The API resources are managed as a linked list. Hence, his can be done as often you (or the device memory) like.
+
+# HTTP Request
+Example without variables:
+```HTTP
+GET /api/reset HTTP/1.1
+Host: 10.0.0.10
+User-Agent: insomnia/2022.2.1
+Authorization: Basic YWRtaW46cGFzc3dvcmQ=
+Accept: */*
+```
+Example with variables:
+```HTTP
+GET /api/reset HTTP/1.1
+Host: 10.0.0.10
+User-Agent: insomnia/2022.2.1
+Authorization: Basic YWRtaW46cGFzc3dvcmQ=
+myvar: myvalue
+Accept: */*
+```
+Variables need to be handled in the uri handler function
