@@ -58,6 +58,10 @@ httpd_handle_t rest_api_start_server(rest_api_t *head)
 
 static const char* HTTP_HEADER_AUTH_FIELD = "Authorization";
 bool rest_api_authenticate(httpd_req_t *req, rest_user_t *users, rest_permissions_t min_permission){
+    // If no permission or user is set then it's fine: return true
+    if(users == NULL || min_permission == REST_USER_PERMISSION_ANY)
+        return true;
+        
     size_t alen = httpd_req_get_hdr_value_len(req, HTTP_HEADER_AUTH_FIELD);
     char* b64 = (char*)malloc(++alen);
     if(!b64){
