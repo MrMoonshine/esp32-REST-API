@@ -56,6 +56,33 @@ httpd_handle_t rest_api_start_server(rest_api_t *head)
     return server;
 }
 
+bool rest_api_recv(httpd_req_t *req){
+    // if req is 0. Give it plenty of memory
+    size_t recv_size = req->content_len ? req->content_len : 128;
+    char* content = (char*)malloc(recv_size);
+    if(content == NULL){
+        httpd_resp_send_500(req);
+        return false;
+    }
+    // Start
+    int ret = httpd_req_recv(req, content, recv_size);
+    // On error
+    if (ret != ESP_OK) {
+        switch (ret){
+            case HTTPD_SOCK_ERR_TIMEOUT:
+                httpd_resp_send_408(req);
+                break;
+            default:
+                ESP_LOGI(TAG, "Error code: %d", ret);
+                break;
+        }
+        /* in case of error exit */
+        return false;
+    }
+    free(content);
+    return true;
+}
+
 static const char* HTTP_HEADER_AUTH_FIELD = "Authorization";
 bool rest_api_authenticate(httpd_req_t *req, rest_user_t *users, rest_permissions_t min_permission){
     // If no permission or user is set then it's fine: return true

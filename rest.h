@@ -36,8 +36,15 @@ void rest_api_delete(rest_api_t **head);
 void rest_api_print(rest_api_t *head);
 /* Function for starting the webserver */
 httpd_handle_t rest_api_start_server(rest_api_t *head);
+/*
+    @brief initial recv and error handling
+*/
+bool rest_api_recv(httpd_req_t *req);
 /* 
     @brief Function for Checking Authentication
+    @param req Request structure. see esp doc
+    @param users Linked list of users
+    @param min_permission Minimum permission level to access the resource
     @return true on sucess false on failure
 */
 bool rest_api_authenticate(httpd_req_t *req, rest_user_t *users, rest_permissions_t min_permission);

@@ -6,31 +6,19 @@ This example shows how to create an API resource that can be used to query the l
 ```c
 static const char* API_RESET_JSON_TEMPLATE = "{\"status\":%d, \"reason\":\"%s\"}";
 esp_err_t rest_reset_handler(httpd_req_t *req){
-    // Static buffer for request
-    char content[100];
-    /* Truncate if content length larger than the buffer */
-    size_t recv_size = min(req->content_len, sizeof(content));
-
-    int ret = httpd_req_recv(req, content, recv_size);
-    // On error
-    if (ret != ESP_OK) {
-        switch (ret){
-            case HTTPD_SOCK_ERR_TIMEOUT:
-                httpd_resp_send_408(req);
-                break;
-            default:
-                ESP_LOGI(TAG, "Error code: %d", ret);
-                break;
-        }
-        /* in case of error exit */
+    /*
+        Receives HTTP header data + does some Error handling
+    */
+    if(!rest_api_recv(req))
         return ESP_FAIL;
-    }
     /*
         A single function that handles authentication and error replies towards the client 
     */
     if(!rest_api_authenticate(req, users, REST_USER_PERMISSION_RW))
         return ESP_FAIL;
-    
+    /*
+        Actual API resource function
+    */
     size_t resplen = strlen(API_RESET_JSON_TEMPLATE) + 24;
     char *resp = (char*)malloc(resplen);
     if(resp){
