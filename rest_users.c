@@ -1,16 +1,26 @@
 #include "rest_users.h"
 static const char* TAG = "REST_USER";
 //Insert at the first position
-rest_user_t * insertrest_user_t(rest_user_t **head, const char *username, const char *password, rest_permissions_t permission){
+rest_user_t * rest_user_add(rest_user_t **head, const char *username, const char *password, rest_permissions_t permission){
     if(strlen(username) < REST_USER_LOGIN_LENGTH && strlen(username) < REST_USER_LOGIN_LENGTH){
         rest_user_t *elem = (rest_user_t*) malloc(sizeof(rest_user_t));
         if(elem == NULL)
             return elem;
         //Assign data
-        memset(elem->user, 0, REST_USER_LOGIN_LENGTH);
-        strcpy(elem->user, username);
-        memset(elem->passwd, 0, REST_USER_LOGIN_LENGTH);
-        strcpy(elem->passwd, password);
+        char *authbasicplain;
+        authbasicplain = (char*)malloc(REST_USER_BASE64_LENGTH);
+        if(authbasicplain == NULL)
+            return NULL;
+        strcpy(authbasicplain, "");
+        strcat(authbasicplain, username);
+        strcat(authbasicplain, ":");
+        strcat(authbasicplain, password);
+        // This is now user:password
+        // Encode this to base64:
+        size_t bufflen = REST_USER_BASE64_LENGTH;
+        mbedtls_base64_encode((unsigned char*)elem->auth, sizeof(elem->auth), &bufflen, (unsigned char*)authbasicplain, strlen(authbasicplain));
+        free(authbasicplain);
+
         elem->permission = permission;
         //Next node is head
         elem->next = *head;
@@ -24,7 +34,7 @@ rest_user_t * insertrest_user_t(rest_user_t **head, const char *username, const 
     }
 }
 //Purge the entire list
-void deleteAllrest_user_t(rest_user_t **head){
+void rest_user_delete(rest_user_t **head){
     while(*head){
         rest_user_t *tmp = *head;
         *head = (*head)->next;
@@ -33,10 +43,10 @@ void deleteAllrest_user_t(rest_user_t **head){
     *head = NULL;
 }
 //Dump it
-void printrest_user_t(rest_user_t *head){
+void rest_user_print(rest_user_t *head){
     rest_user_t *elem = head;
     while(elem){
-        ESP_LOGI(TAG, "%s", elem->user);
+        ESP_LOGI(TAG, "%s", elem->auth);
         elem = elem->next;
     }
 }

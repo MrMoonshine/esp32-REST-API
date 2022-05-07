@@ -1,11 +1,16 @@
 #pragma once
+#include <stdbool.h>
 #include <stdlib.h>
 #include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_http_server.h"
+#include "rest_users.h"
+
 static const char* TAG = "REST";
+#define REST_401_JSON "{\"error\":401, \"description\":\"Unauthorized\"}"
+#define REST_403_JSON "{\"error\":403, \"description\":\"Forbidden\"}"
 /*
     DEBUG:
     GUI:
@@ -15,7 +20,7 @@ static const char* TAG = "REST";
 */
 /*
     @brief API Call List
-    @param uri URI  example: "/api/var1"
+    @param uri URI. See espressif doc
     @param next Next element in list
 */
 typedef struct rest_api_t{
@@ -31,3 +36,8 @@ void rest_api_delete(rest_api_t **head);
 void rest_api_print(rest_api_t *head);
 /* Function for starting the webserver */
 httpd_handle_t rest_api_start_server(rest_api_t *head);
+/* 
+    @brief Function for Checking Authentication
+    @return true on sucess false on failure
+*/
+bool rest_api_authenticate(httpd_req_t *req, rest_user_t *users, rest_permissions_t min_permission);
