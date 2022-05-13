@@ -28,6 +28,10 @@ typedef struct rest_user_t{
     struct rest_user_t *next;
 } rest_user_t;
 /*
+    @brief Common pointer to user object. Don't forget to set it to NULL before dealing with it
+*/
+rest_user_t *rest_api_users;
+/*
     @brief Add ned user to list
     @param head List head
     @param username Username (max. 32 char)
