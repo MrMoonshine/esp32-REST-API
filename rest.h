@@ -1,4 +1,7 @@
 #pragma once
+#include "rest_default_handlers.h"
+#include "rest_users.h"
+
 #include <stdbool.h>
 #include <stdlib.h>
 #include "sdkconfig.h"
@@ -6,7 +9,6 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include "esp_http_server.h"
-#include "rest_users.h"
 
 static const char* TAG = "REST";
 #define REST_401_JSON "{\"error\":401, \"description\":\"Unauthorized\"}"

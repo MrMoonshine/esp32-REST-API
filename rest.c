@@ -113,7 +113,9 @@ bool rest_api_authenticate(httpd_req_t *req, rest_user_t *users, rest_permission
             }
             elem = elem->next;
         }
-        
+        // Invalid login
+        httpd_resp_set_type(req, "text/json");
+        httpd_resp_send_err(req, HTTPD_401_UNAUTHORIZED, REST_401_JSON);
     }else if(err == ESP_ERR_NOT_FOUND){
         httpd_resp_set_type(req, "text/json");
         httpd_resp_send_err(req, HTTPD_401_UNAUTHORIZED, REST_401_JSON);
