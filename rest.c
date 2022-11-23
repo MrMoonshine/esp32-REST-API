@@ -1,4 +1,5 @@
 #include "rest.h"
+static const char* TAG = "REST";
 
 bool rest_api_mdns(const char *hostname){
     esp_err_t err = mdns_init();

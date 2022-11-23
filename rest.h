@@ -11,7 +11,6 @@
 #include "esp_log.h"
 #include "esp_http_server.h"
 
-static const char* TAG = "REST";
 #define REST_401_JSON "{\"error\":401, \"description\":\"Unauthorized\"}"
 #define REST_403_JSON "{\"error\":403, \"description\":\"Forbidden\"}"
 /*

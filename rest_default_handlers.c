@@ -43,7 +43,7 @@ esp_err_t rest_default_reset_handler(httpd_req_t *req){
             default:                return ESP_FAIL;                  break;
         }
 
-        httpd_resp_set_type(req, "text/json");
+        httpd_resp_set_type(req, "application/json");
         httpd_resp_send(req, resp, strlen(resp));
         return ESP_OK;
     }else{
