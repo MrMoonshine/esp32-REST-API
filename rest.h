@@ -7,7 +7,6 @@
 #include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include "mdns.h"
 #include "esp_log.h"
 #include "esp_http_server.h"
 
@@ -20,12 +19,6 @@
     Authenticated request from CLI:
     me@pc$ curl --user user:passwd http://x.x.x.x/api/
 */
-/*
-    @brief sets mDNS name. Usefull for home networks
-    @param hostname Local hostname
-    @return true on success
-*/
-bool rest_api_mdns(const char *hostname);
 /*
     @brief API Call List
     @param uri URI. See espressif doc

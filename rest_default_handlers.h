@@ -2,6 +2,7 @@
 #include "esp_log.h"
 #include "esp_http_server.h"
 #include "rest.h"
+#include <time.h>
 /*
     This file is used, to provide some basic handlers to the API
 */

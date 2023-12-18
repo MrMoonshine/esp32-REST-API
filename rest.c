@@ -1,24 +1,6 @@
 #include "rest.h"
 static const char* TAG = "REST";
 
-bool rest_api_mdns(const char *hostname){
-    esp_err_t err = mdns_init();
-    if (err) {
-        return false;
-    }
-
-    //set hostname
-    mdns_hostname_set(hostname);
-    mdns_instance_name_set("REST-API on ESP32");
-
-    mdns_txt_item_t serviceTxtData[] = {
-        {"board", "esp32"},
-        {"path", "/"}
-    };
-    ESP_ERROR_CHECK(mdns_service_add("ESP32-REST-Server", "_http", "_tcp", 80, serviceTxtData, sizeof(serviceTxtData) / sizeof(serviceTxtData[0])));
-    return true;
-}
-
 //Insert at the first position
 rest_api_t * rest_api_add(rest_api_t **head, httpd_uri_t *uri){
     if(!uri)
